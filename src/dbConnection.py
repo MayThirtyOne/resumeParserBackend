@@ -120,7 +120,6 @@ def submitForm(email: str, data):
 
     usersDocument = db.users
 
-
     myquery = {"_id": email}
 
     usersDocument.save(data)
@@ -130,3 +129,19 @@ def submitForm(email: str, data):
         return doc
     else:
         return False
+
+
+def queryAllJobs():
+    client = MongoClient(
+        "mongodb+srv://resumeParserAdmin:vijay789@resumeparser.g0dcg.mongodb.net/myFirstDatabase?retryWrites=true&w=majority")
+    db = client.recruiters
+
+    usersDocument = db.allJobs
+    res = []
+
+    for docs in usersDocument.find():
+        res.append(docs)
+    return res
+
+
+print(queryAllJobs())

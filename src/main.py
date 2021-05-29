@@ -4,6 +4,7 @@ import pickle
 from downloadPDF import savePDF
 from dbConnection import *
 import fitz
+from calculateScore import calcScore
 from fastapi.middleware.cors import CORSMiddleware
 
 
@@ -78,9 +79,25 @@ async def root(request: Request):
     emailJSON = await request.json()
     email = emailJSON['email']
     data = emailJSON['formValue']
-    
+
     res = submitForm(email, data)
     if res:
         return res
+    else:
+        return {'status': 'userNotAvailable1'}
+
+
+@app.post("/getJobInfo/")
+async def root(request: Request):
+    emailJSON = await request.json()
+    email = emailJSON['email']
+    res = queryAllJobs()
+    r = {}
+
+    r['data'] = res
+    r['score'] = calcScore(email)
+
+    if res:
+        return r
     else:
         return {'status': 'userNotAvailable1'}
